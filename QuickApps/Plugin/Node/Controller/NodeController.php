@@ -286,9 +286,10 @@ class NodeController extends NodeAppController {
 		$this->Node->bindModel(
 			array(
 				'hasOne' => array(
-					'NodeSearch' => array(
-						'className' => 'Node.NodeSearch',
-						'foreignKey' => 'node_id',
+					'SearchData' => array(
+						'className' => 'System.SearchData',
+						'foreignKey' => 'foreignKey',
+						'entity' => 'Node',
 						'fields' => array('data')
 					)
 				)
@@ -487,7 +488,7 @@ class NodeController extends NodeAppController {
 						continue;
 					}
 
-					$scope['NOT'][] = array('NodeSearch.data LIKE' => "%{$n}%");
+					$scope['NOT'][] = array('SearchData.data LIKE' => "%{$n}%");
 				}
 			}
 
@@ -496,7 +497,7 @@ class NodeController extends NodeAppController {
 				$criteria = str_replace($phrase[0], '', $criteria);
 				$criteria = trim(preg_replace('/ {2,}/', ' ',  $criteria));
 				$phrase = trim($phrase[1]);
-				$scope['AND'][] = array('NodeSearch.data LIKE' => "%{$phrase}%");
+				$scope['AND'][] = array('SearchData.data LIKE' => "%{$phrase}%");
 			}
 
 			$criteria = explode('OR', trim($criteria));
@@ -508,7 +509,7 @@ class NodeController extends NodeAppController {
 					continue;
 				}
 
-				$scope['AND']['OR'][] = array('NodeSearch.data LIKE' => "%{$or}%");
+				$scope['AND']['OR'][] = array('SearchData.data LIKE' => "%{$or}%");
 			}
 
 			// pass scoping params to modules

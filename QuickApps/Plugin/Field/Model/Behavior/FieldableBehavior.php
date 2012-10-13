@@ -130,10 +130,16 @@ class FieldableBehavior extends ModelBehavior {
 /**
  * Settings for this behavior.
  *
+ * -	belongsTo (mixed): Used by polymorphic binding such as Nodes.
+ * -	indexField (array): List of fields to add to the search index stack.
+ *		e.g. `title`, `description` for `Node` entity. So Node entities can be located
+ *		(search engine) by any of the words in their titles or description.
+ *
  * @var array
  */
 	private $__settings = array(
-		'belongsTo' => false
+		'belongsTo' => false,
+		'indexFields' => array()
 	);
 
 /**
@@ -202,6 +208,38 @@ class FieldableBehavior extends ModelBehavior {
 				if ($Model->hookDefined("{$field['field_module']}_before_find")) {
 					$Model->hook("{$field['field_module']}_before_find", $data);
 				}
+			}
+		}
+
+		/**
+		 * Automagic find by CCK fields.
+		 *
+		 *     ...
+		 *     'conditions' => array(
+		 *         ':cck_field_name1' => 'Exact Match',
+		 *         'Entity.:cck_field_name2 LIKE' => '%Containts this phrase%',
+		 *         'Entity.:FieldText LIKE' => '%where any of its FieldText instances contains this words%',
+		 *         'Entity.: LIKE' => '%look on any CCK Field%'
+		 *     )
+		 *     ...
+		 */
+		if (isset($query['conditions']) && is_array($query['conditions'])) {
+			$keys = $this->__array_keys_recursive($query['conditions']);
+
+			if (strpos(implode(' ', $keys), ':') !== false) {
+				$this->__buildCckConditions($query['conditions']);
+				$Model->bindModel(
+					array(
+						'hasOne' => array(
+							'SearchData' => array(
+								'className' => 'System.SearchData',
+								'foreignKey' => 'foreignKey',
+								'entity' => $Model->alias,
+								'fields' => array('data')
+							)
+						)
+					)
+				);
 			}
 		}
 
@@ -520,20 +558,36 @@ class FieldableBehavior extends ModelBehavior {
  * later by `FieldableBehavior::__processSearchIndex()`.
  *
  * @param object $Model Instance of model
- * @param string $field_content Field's text (content) to index
- * @return boolean TRUE on sucess, FALSE otherwise
+ * @param string $search_data Field's text (content) to index
+ * @param integer $instance_id Field instance ID within the `fields` table.
+ * @return boolean TRUE on sucess or FALSE otherwise
  * @see FieldableBehavior::__processSearchIndex()
  */
-	public function indexField(Model $Model, $field_content) {
-		if ($Model->alias != 'Node' || !$Model->id || !is_string($field_content)) {
+	public function indexField(Model $Model, $search_data, $instance_id) {
+		if (empty($search_data)) {
 			return false;
 		}
 
-		if (!isset($this->__tmp['NodeSearchData'])) {
-			$this->__tmp['NodeSearchData'] = array();
+		$Field = ClassRegistry::init('Field.Field')->find('first',
+			array(
+				'conditions' => array('Field.id' => $instance_id),
+				'recursive' => -1,
+				'fields' => array('id', 'name', 'field_module')
+			)
+		);
+
+		if (!$Field) {
+			return false;
 		}
 
-		$this->__tmp['NodeSearchData'][] = $field_content;
+		if (!isset($this->__tmp['SearchData'])) {
+			$this->__tmp['SearchData'] = array();
+		}
+
+		$search_data = (string)$search_data;
+		$fModule = $Field['Field']['field_module'];
+		$fName = $Field['Field']['name'];
+		$this->__tmp['SearchData'][$fModule][$fName] = $search_data;
 
 		return true;
 	}
@@ -601,23 +655,176 @@ class FieldableBehavior extends ModelBehavior {
 	}
 
 /**
+ * Recursively get array keys.
+ *
+ * ### Example:
+ * 
+ *     $ar = array(
+ *         'User' => array(
+ *              'name' => 'John',
+ *              'last_name' => 'Locke',
+ *				'live_in' => 'An Island'
+ *          )
+ *     );
+ *     
+ *     __array_keys_recursive($ar);
+ *     // result:
+ *     array('User', 'name', 'last_name', 'live_in')
+ *
+ * @param $ar array Array where to get keys
+ * @return array List of keys
+ */
+	private function __array_keys_recursive($ar) {
+		$temp = array();
+
+		foreach ($ar as $k => $v) {
+			$temp[] = $k;
+
+			if (is_array($v)) {
+				$temp = array_merge($temp, $this->__array_keys_recursive($v));
+			}
+		}
+
+		return $temp;
+	}
+
+/**
+ * Look for CCK Field conditions for beforeFind().
+ *
+ * @param $conditions array Original conditions from find() to alter
+ * @return void
+ */
+	private function __buildCckConditions(&$conditions) {
+		$bool = array('and', 'or', 'not', 'and not', 'or not', 'xor', '||', '&&');
+
+		foreach ($conditions as $key => $value) {
+			if ((is_numeric($key) && is_array($value)) || in_array(strtolower(trim($key)), $bool)) {
+				$this->__buildCckConditions($conditions[$key]);
+			} else {
+				if (strpos($key, ':') !== false) {
+					list($entity, $field_name) = pluginSplit($key);
+
+					if (!$field_name) {
+						$field_name = $entity;
+					}
+
+					$field_name = str_replace(':', '', $field_name);
+					$like = strpos(strtolower($field_name), 'like') !== false ? ' LIKE' : '';
+
+					if (!empty($like)) {
+						$field_name = preg_replace('/like/i', '', $field_name);
+						$field_name = str_replace(' ', '', $field_name);
+					}
+
+					unset($conditions[$key]);
+
+					if (empty($field_name)) {
+						$value = "%{$value}%";
+						$value = preg_replace('/%{2, }/', '%', $value);
+						$conditions["SearchData.data{$like}"] = $value;
+					} else {
+						$conditions["SearchData.data{$like}"] = "%<!--{$field_name}-->{$value}<!--/{$field_name}-->%";
+					}
+				}
+			}
+		}
+	}
+
+/**
  * Save all the texts added to the stack by FieldableBehavior::indexField()
  *
  * @return boolean TRUE on sucess, FALSE otherwise.
  * @see FieldableBehavior::indexField()
  */
 	private function __processSearchIndex(Model $Model) {
-		if (!isset($this->__tmp['NodeSearchData'])) {
+		if (!isset($this->__tmp['SearchData'])) {
 			return false;
 		}
 
 		App::uses('String', 'Utility');
 
-		$node = $Model->read();
-		$this->__tmp['NodeSearchData'][] = $node['Node']['slug'];
-		$this->__tmp['NodeSearchData'][] = $node['Node']['title'];
-		$this->__tmp['NodeSearchData'][] = $node['Node']['description'];
-		$text = implode(' ', $this->__tmp['NodeSearchData']);
+		// fetch model fields
+		if (!empty($this->__settings[$Model->alias]['indexFields']) && $Model->id) {
+			if (is_string($this->__settings[$Model->alias]['indexFields'])) {
+				$this->__settings[$Model->alias]['indexFields'] = array($this->__settings[$Model->alias]['indexFields']);
+			}
+
+			$entity = $Model->read();
+
+			if ($entity) {
+				foreach ($this->__settings[$Model->alias]['indexFields'] as $f) {
+					if (isset($entity[$Model->alias][$f]) && !empty($entity[$Model->alias][$f])) {
+						$this->__tmp['SearchData'][] = $entity[$Model->alias][$f];
+					}
+				}
+			}
+		}
+
+		$searchData = '';
+
+		foreach ($this->__tmp['SearchData'] as $Field => $content) {
+			if (is_array($content)) {
+				$fields = $content;
+				$content = '';
+
+				foreach ($fields as $field_name => $text) {
+					$clean = $this->__processSearchText($text);
+
+					if (!empty($clean)) {
+						$content .= "<!--{$field_name}-->" . $clean  .  "<!--/{$field_name}-->";
+					}
+				}
+			} else {
+				$content = $this->__processSearchText($content);
+			}
+
+			if (is_string($Field) && !empty($content)) {
+				$content = "<!--{$Field}-->" . $content . "<!--/{$Field}-->";
+			}
+
+			$searchData .= ' ' . $content;
+		}
+
+		$searchData = trim($searchData);
+
+		if (empty($searchData)) {
+			return false;
+		} else {
+			$searchData = ' ' . $searchData . ' ';
+		}
+
+		$SearchData = ClassRegistry::init('System.SearchData');
+		$save = $SearchData->find('first',
+			array(
+				'conditions' => array(
+					'foreignKey' => $Model->id,
+					'entity' => $Model->alias
+				)
+			)
+		);
+
+		if (!$save) {
+			$save = array(
+				'SearchData' => array(
+					'foreignKey' => $Model->id,
+					'entity' => $Model->alias,
+					'data' => $searchData
+				)
+			);
+		} else {
+			$save['SearchData']['data'] = $searchData;
+		}
+
+		return $SearchData->save($save);
+	}
+
+/**
+ * Process the given text to be stored in `search_data` table.
+ *
+ * @param $text string Text to sanitize
+ * @return string Sanitized text
+ */
+	private function __processSearchText($text) {
 		$text = html_entity_decode($text, ENT_QUOTES, 'UTF-8');
 		$text = mb_strtolower($text);
 
@@ -655,26 +862,7 @@ class FieldableBehavior extends ModelBehavior {
 
 		$text = implode(' ', $words);
 
-		if (empty($text)) {
-			return false;
-		}
-
-		$text = ' ' . $text . ' ';
-		$NodeSearch = ClassRegistry::init('Node.NodeSearch');
-		$save = $NodeSearch->findByNodeId($Model->id);
-
-		if (!$save) {
-			$save = array(
-				'NodeSearch' => array(
-					'node_id' => $Model->id,
-					'data' => $text
-				)
-			);
-		} else {
-			$save['NodeSearch']['data'] = $text;
-		}
-
-		return $NodeSearch->save($save);
+		return $text;
 	}
 
 /**

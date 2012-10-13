@@ -409,7 +409,7 @@ CREATE TABLE `qa_menu_links` (
 
 LOCK TABLES `qa_menu_links` WRITE;
 /*!40000 ALTER TABLE `qa_menu_links` DISABLE KEYS */;
-INSERT INTO `qa_menu_links` VALUES (1,'management',1,2,0,NULL,'/admin/system/dashboard',NULL,'Dashboard',NULL,'System','_self',0,NULL,NULL,1),(2,'management',3,12,0,NULL,'/admin/system/structure',NULL,'Structure',NULL,'System','_self',0,NULL,NULL,1),(3,'management',13,14,0,NULL,'/admin/node/contents',NULL,'Content',NULL,'System','_self',0,NULL,NULL,1),(4,'management',15,16,0,NULL,'/admin/system/themes',NULL,'Appearance',NULL,'System','_self',0,NULL,NULL,1),(5,'management',17,18,0,NULL,'/admin/system/modules',NULL,'Modules',NULL,'System','_self',0,NULL,NULL,1),(6,'management',19,20,0,NULL,'/admin/user',NULL,'Users',NULL,'System','_self',0,NULL,NULL,1),(7,'management',23,24,0,NULL,'/admin/system/configuration',NULL,'Configuration',NULL,'System','_self',0,NULL,NULL,1),(8,'management',25,26,0,NULL,'/admin/system/help',NULL,'Help',NULL,'System','_self',0,NULL,NULL,1),(9,'management',4,5,2,NULL,'/admin/block','Configure what block content appears in your site\'s sidebars and other regions.','Blocks',NULL,'System','_self',0,NULL,NULL,1),(10,'management',6,7,2,NULL,'/admin/node/types','Manage content types.','Content Types',NULL,'System','_self',0,NULL,NULL,1),(11,'management',8,9,2,NULL,'/admin/menu','Add new menus to your site, edit existing menus, and rename and reorganize menu links.','Menus',NULL,'System','_self',0,NULL,NULL,1),(12,'management',10,11,2,NULL,'/admin/taxonomy','Manage tagging, categorization, and classification of your content.','Taxonomy',NULL,'System','_self',0,NULL,NULL,1),(13,'main-menu',3,4,0,NULL,'/page/hooktags.html','','Hooktags',NULL,'Menu','_self',0,NULL,NULL,1),(17,'main-menu',5,6,0,NULL,'/page/about.html','','About',NULL,'Menu','_self',0,NULL,NULL,1),(18,'management',21,22,0,NULL,'/admin/locale','','Languages',NULL,'Locale','_self',0,NULL,NULL,1),(21,'main-menu',1,2,0,NULL,'/','','Home',NULL,'Menu','_self',0,NULL,NULL,1),(22,'user-menu',1,2,0,NULL,'/user/my_account','','My account',NULL,'Menu','_self',0,NULL,NULL,1),(23,'user-menu',3,4,0,NULL,'/user/logout','','Logout',NULL,'Menu','_self',0,NULL,NULL,1),(24,'main-menu',7,8,0,NULL,'/search/type:article','','Blog',NULL,'Menu','_self',0,'/article/*.html\r\n/search/type:article*','reg',1),(25,'navigation',1,2,0,'http://www.quickappscms.org',NULL,'','QuickApps Site',NULL,'Menu','_blank',0,'','',1),(26,'navigation',3,4,0,'https://github.com/QuickAppsCMS/QuickApps-CMS/wiki',NULL,'','Wiki',NULL,'Menu','_blank',0,'','',1);
+INSERT INTO `qa_menu_links` VALUES (1,'management',1,2,0,NULL,'/admin/system/dashboard',NULL,'Dashboard',NULL,'System','_self',0,NULL,NULL,1),(2,'management',3,12,0,NULL,'/admin/system/structure',NULL,'Structure',NULL,'System','_self',0,NULL,NULL,1),(3,'management',13,14,0,NULL,'/admin/node/contents',NULL,'Content',NULL,'System','_self',0,NULL,NULL,1),(4,'management',15,16,0,NULL,'/admin/system/themes',NULL,'Appearance',NULL,'System','_self',0,NULL,NULL,1),(5,'management',17,18,0,NULL,'/admin/system/modules',NULL,'Modules',NULL,'System','_self',0,NULL,NULL,1),(6,'management',19,20,0,NULL,'/admin/user',NULL,'Users',NULL,'System','_self',0,NULL,NULL,1),(7,'management',23,24,0,NULL,'/admin/system/configuration',NULL,'Configuration',NULL,'System','_self',0,NULL,NULL,1),(8,'management',25,26,0,NULL,'/admin/system/help',NULL,'Help',NULL,'System','_self',0,NULL,NULL,1),(9,'management',4,5,2,NULL,'/admin/block','Configure what block content appears in your site\'s sidebars and other regions.','Blocks',NULL,'System','_self',0,NULL,NULL,1),(10,'management',6,7,2,NULL,'/admin/node/types','Manage content types.','Content Types',NULL,'System','_self',0,NULL,NULL,1),(11,'management',8,9,2,NULL,'/admin/menu','Add new menus to your site, edit existing menus, and rename and reorganize menu links.','Menus',NULL,'System','_self',0,NULL,NULL,1),(12,'management',10,11,2,NULL,'/admin/taxonomy','Manage tagging, categorization, and classification of your content.','Taxonomy',NULL,'System','_self',0,NULL,NULL,1),(13,'main-menu',3,4,0,NULL,'/page/hooktags.html','','Hooktags',NULL,'Menu','_self',0,NULL,NULL,1),(17,'main-menu',5,6,0,NULL,'/page/about.html','','About',NULL,'Menu','_self',0,NULL,NULL,1),(18,'management',21,22,0,NULL,'/admin/locale','','Languages',NULL,'Locale','_self',0,NULL,NULL,1),(21,'main-menu',1,2,0,NULL,'/','','Home',NULL,'Menu','_self',0,NULL,NULL,1),(22,'user-menu',1,2,0,NULL,'/user/my_account','','My account',NULL,'Menu','_self',0,NULL,NULL,1),(23,'user-menu',3,4,0,NULL,'/user/logout','','Logout',NULL,'Menu','_self',0,NULL,NULL,1),(24,'main-menu',7,8,0,NULL,'/search/type:article','','Blog',NULL,'Menu','_self',0,'/article/*.html\r\n/search/type:article*','reg',1),(25,'navigation',1,2,0,'http://www.quickappscms.org',NULL,'','QuickApps Site',NULL,'Menu','_blank',0,'','',1),(26,'navigation',3,4,0,'https://github.com/QuickAppsCMS/QuickApps-CMS-Docs',NULL,'','Documentation',NULL,'Menu','_blank',0,'','',1);
 /*!40000 ALTER TABLE `qa_menu_links` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -575,31 +575,6 @@ LOCK TABLES `qa_nodes_roles` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `qa_nodes_searches`
---
-
-DROP TABLE IF EXISTS `qa_nodes_searches`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `qa_nodes_searches` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `node_id` int(10) NOT NULL,
-  `data` longtext COLLATE utf8_unicode_ci,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `qa_nodes_searches`
---
-
-LOCK TABLES `qa_nodes_searches` WRITE;
-/*!40000 ALTER TABLE `qa_nodes_searches` DISABLE KEYS */;
-INSERT INTO `qa_nodes_searches` VALUES (1,1,' h3 content boxes h3 contentbox type success maecenas pellentesque cursus auctor contentbox contentbox type error nam sagittis nisl non turpis aliquam mollis suspendisse ac metus nisi sed vulputate arcu contentbox contentbox type alert cras interdum leo quis arcu sagittis pulvinar curabitur suscipit vulputate erat eu rhoncus morbi facilisis mi in ligula ornare ultricies contentbox contentbox type bubble fusce interdum cursus turpis vitae gravida aenean aliquet venenatis posuere etiam gravida ullamcorper purus contentbox hr h3 buttons h3 using buttons hooktags you can easily create variety of buttons these buttons all stem from single tag but vary in color and size each of which are adjustable using color and size parameters br allowed parameters ol li strong size strong big small li li strong color strong ul li small black blue green lightblue orange pink purple red silver teal li li big blue green orange purple red turquoise li ul li li strong link strong url of your button li li strong target strong open link en new window blank open in same window self or unset parameter li ol h4 h4 h4 small buttons h4 table style width 478px height 25px tbody tr td button color black button text button td td button color blue button text button td tr tr td button color green button text button td td button color lightblue button text button td tr tr td button color orange button text button td td button color pink button text button td tr tr td button color purple button text button td td button color red button text button td tr tr td button color silver button text button td td button color teal button text button td tr tbody table h4 h4 h4 big buttons h4 table style width 478px height 25px tbody tr td button color blue size big button text button td td button color green size big button text button td tr tr td button color orange size big button text button td td button color purple size big button text button td tr tr td button color red size big button text button td td button color turquoise size big button text button td tr tbody table hooktags hooktags '),(2,3,' announcements cakephp1 cms quickapps pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas vestibulum turpis mi pulvinar ac placerat ut luctus vel arcu cras ac vulputate sed integer in augue neque mollis semper eget nec est donec eros justo ornare non sollicitudin ut viverra nec ligula cras quis nisl magna vivamus tortor est lobortis sit amet vehicula sed porta vitae risus quisque sit amet justo elit fusce in eros augue sed gravida ligula integer ac sem neque nulla vitae neque nibh ultricies vehicula vel massa quisque at ante sit amet metus auctor dignissim nec nec est nullam et lacus diam viverra suscipit vitae ut neque suspendisse in lacus vel ipsum lacinia rutrum id eget ligula vestibulum vehicula elit vel nunc ultricies scelerisque sagittis mi consectetur maecenas bibendum augue ut urna sodales molestie quisque ultrices hendrerit ipsum ac dictum mi porta eget integer fringilla suscipit nisl id hendrerit elit fringilla sed curabitur quis elit vitae est vulputate adipiscing nec risus curabitur euismod sodales risus non commodo integer tincidunt dolor urna convallis interdum curabitur quis velit et ante convallis venenatis ut nec ipsum et arcu ultrices mattis cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus nullam nec est neque donec vitae interdum velit lorem ipsum dolor sit amet consectetur adipiscing elit duis venenatis faucibus odio sed lobortis enim euismod et fusce vel risus et mauris feugiat consectetur class aptent taciti sociosqu ad litora torquent per conubia nostra per inceptos himenaeosaenean condimentum feugiat lectus eget porttitor sed volutpat pretium felis ac pulvinar sapien dapibus quis myfirstarticle my first article '),(3,2,' strong quickapps cms strong is free open source cms released under gpl license and inspired by most of the popular cms br powered by cakephp v2 strong mvc framework strong makes this cms the perfect development platform robust application fully expandable and capable of manage virtually any website from very simplistic websites as well as very complex web sites about about ');
-/*!40000 ALTER TABLE `qa_nodes_searches` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `qa_nodes_terms`
 --
 
@@ -612,7 +587,7 @@ CREATE TABLE `qa_nodes_terms` (
   `term_id` int(20) NOT NULL DEFAULT '0',
   `field_id` int(11) NOT NULL DEFAULT '0' COMMENT 'field instance''s ID which creates this tag assoc.',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -621,7 +596,7 @@ CREATE TABLE `qa_nodes_terms` (
 
 LOCK TABLES `qa_nodes_terms` WRITE;
 /*!40000 ALTER TABLE `qa_nodes_terms` DISABLE KEYS */;
-INSERT INTO `qa_nodes_terms` VALUES (1,3,1,4),(2,3,9,4),(3,3,8,4),(4,3,7,4);
+INSERT INTO `qa_nodes_terms` VALUES (5,3,1,4),(6,3,9,4),(7,3,8,4),(8,3,7,4);
 /*!40000 ALTER TABLE `qa_nodes_terms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -648,6 +623,32 @@ LOCK TABLES `qa_roles` WRITE;
 /*!40000 ALTER TABLE `qa_roles` DISABLE KEYS */;
 INSERT INTO `qa_roles` VALUES (1,'administrator',1),(2,'authenticated user',2),(3,'anonymous user',3);
 /*!40000 ALTER TABLE `qa_roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qa_search_data`
+--
+
+DROP TABLE IF EXISTS `qa_search_data`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qa_search_data` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `foreignKey` bigint(20) NOT NULL COMMENT 'entity ID. e.g. node_id for Nodes',
+  `entity` varchar(30) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Type of item. e.g. Node, User, Comment, etc',
+  `data` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'List of space-separated words from the item.',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qa_search_data`
+--
+
+LOCK TABLES `qa_search_data` WRITE;
+/*!40000 ALTER TABLE `qa_search_data` DISABLE KEYS */;
+INSERT INTO `qa_search_data` VALUES (1,1,'Node',' <!--FieldText--><!--body-->h3 content boxes h3 contentbox type success maecenas pellentesque cursus auctor contentbox contentbox type error nam sagittis nisl non turpis aliquam mollis suspendisse ac metus nisi sed vulputate arcu contentbox contentbox type alert cras interdum leo quis arcu sagittis pulvinar curabitur suscipit vulputate erat eu rhoncus morbi facilisis mi in ligula ornare ultricies contentbox contentbox type bubble fusce interdum cursus turpis vitae gravida aenean aliquet venenatis posuere etiam gravida ullamcorper purus contentbox hr h3 buttons h3 using buttons hooktags you can easily create variety of buttons these buttons all stem from single tag but vary in color and size each of which are adjustable using color and size parameters br allowed parameters ol li strong size strong big small li li strong color strong ul li small black blue green lightblue orange pink purple red silver teal li li big blue green orange purple red turquoise li ul li li strong link strong url of your button li li strong target strong open link en new window blank open in same window self or unset parameter li ol h4 h4 h4 small buttons h4 table style width 478px height 25px tbody tr td button color black button text button td td button color blue button text button td tr tr td button color green button text button td td button color lightblue button text button td tr tr td button color orange button text button td td button color pink button text button td tr tr td button color purple button text button td td button color red button text button td tr tr td button color silver button text button td td button color teal button text button td tr tbody table h4 h4 h4 big buttons h4 table style width 478px height 25px tbody tr td button color blue size big button text button td td button color green size big button text button td tr tr td button color orange size big button text button td td button color purple size big button text button td tr tr td button color red size big button text button td td button color turquoise size big button text button td tr tbody table<!--/body--><!--/FieldText--> hooktags hooktags '),(2,3,'Node',' <!--TaxonomyTerms--><!--field_article_category-->announcements cakephp1 cms quickapps<!--/field_article_category--><!--/TaxonomyTerms--> <!--FieldText--><!--field_article_introduction-->pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas vestibulum turpis mi pulvinar ac placerat ut luctus vel arcu cras ac vulputate sed<!--/field_article_introduction--><!--field_article_content-->integer in augue neque mollis semper eget nec est donec eros justo ornare non sollicitudin ut viverra nec ligula cras quis nisl magna vivamus tortor est lobortis sit amet vehicula sed porta vitae risus quisque sit amet justo elit fusce in eros augue sed gravida ligula integer ac sem neque nulla vitae neque nibh ultricies vehicula vel massa quisque at ante sit amet metus auctor dignissim nec nec est nullam et lacus diam viverra suscipit vitae ut neque suspendisse in lacus vel ipsum lacinia rutrum id eget ligula vestibulum vehicula elit vel nunc ultricies scelerisque sagittis mi consectetur maecenas bibendum augue ut urna sodales molestie quisque ultrices hendrerit ipsum ac dictum mi porta eget integer fringilla suscipit nisl id hendrerit elit fringilla sed curabitur quis elit vitae est vulputate adipiscing nec risus curabitur euismod sodales risus non commodo integer tincidunt dolor urna convallis interdum curabitur quis velit et ante convallis venenatis ut nec ipsum et arcu ultrices mattis cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus nullam nec est neque donec vitae interdum velit lorem ipsum dolor sit amet consectetur adipiscing elit duis venenatis faucibus odio sed lobortis enim euismod et fusce vel risus et mauris feugiat consectetur class aptent taciti sociosqu ad litora torquent per conubia nostra per inceptos himenaeosaenean condimentum feugiat lectus eget porttitor sed volutpat pretium felis ac pulvinar sapien dapibus quis<!--/field_article_content--><!--/FieldText--> myfirstarticle my first article '),(3,2,'Node',' <!--FieldText--><!--body-->strong quickapps cms strong is free open source cms released under gpl license and inspired by most of the popular cms br powered by cakephp v2 strong mvc framework strong makes this cms the perfect development platform robust application fully expandable and capable of manage virtually any website from very simplistic websites as well as very complex web sites<!--/body--><!--/FieldText--> about about ');
+/*!40000 ALTER TABLE `qa_search_data` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -838,4 +839,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-09-10 17:00:59
+-- Dump completed on 2012-10-13 17:53:04
